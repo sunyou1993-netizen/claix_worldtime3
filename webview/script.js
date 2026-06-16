@@ -6,32 +6,7 @@ window.handleCloseBtnClick = function(e) {
     if (typeof e.stopPropagation === "function") e.stopPropagation();
   }
 
-  const redirectUrl = "https://claix-toolkit-xzrp.vercel.app/";
-
-  // Pure redirection only (No postMessage, No Android/iOS bridge call, No window.close) to ensure zero toast alerts from the host wrapper
-  try {
-    if (window.top && window.top !== window) {
-      window.top.location.href = redirectUrl;
-    }
-  } catch (err) {}
-
-  try {
-    if (window.parent && window.parent !== window) {
-      window.parent.location.href = redirectUrl;
-    }
-  } catch (err) {}
-
-  try {
-    window.location.replace(redirectUrl);
-  } catch (err) {}
-
-  try {
-    window.location.href = redirectUrl;
-  } catch (err) {}
-
-  try {
-    window.open(redirectUrl, "_self");
-  } catch (err) {}
+  window.location.href = 'https://claix-toolkit-xzrp.vercel.app/';
 };
 
 window.handleHeaderClick = function(e) {
@@ -42,31 +17,64 @@ window.handleHeaderClick = function(e) {
 
   const redirectUrl = "https://claix-worldtime3-j783.vercel.app/";
 
-  // Method 1: Try top/parent window navigation first to break out of iframe
+  // 1. Try dynamic anchor navigation
+  try {
+    const a = document.createElement("a");
+    a.href = redirectUrl;
+    a.target = "_top";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (err) {}
+
+  try {
+    const a = document.createElement("a");
+    a.href = redirectUrl;
+    a.target = "_parent";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (err) {}
+
+  try {
+    const a = document.createElement("a");
+    a.href = redirectUrl;
+    a.target = "_self";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (err) {}
+
+  // 2. Direct locations
   try {
     if (window.top && window.top !== window) {
       window.top.location.href = redirectUrl;
-      return;
     }
   } catch (err) {}
 
   try {
     if (window.parent && window.parent !== window) {
       window.parent.location.href = redirectUrl;
-      return;
     }
-  } catch (err) {}
-
-  // Method 2: Local frame navigation immediately as reliable fallback
-  try {
-    window.location.href = redirectUrl;
   } catch (err) {}
 
   try {
     window.location.replace(redirectUrl);
   } catch (err) {}
 
-  // Method 3: Fallback open in _self
+  try {
+    window.location.href = redirectUrl;
+  } catch (err) {}
+
+  // 3. Fallbacks using window.open
+  try {
+    window.open(redirectUrl, "_top");
+  } catch (err) {}
+
+  try {
+    window.open(redirectUrl, "_parent");
+  } catch (err) {}
+
   try {
     window.open(redirectUrl, "_self");
   } catch (err) {}
