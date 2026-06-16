@@ -2,49 +2,74 @@
 
 (window as any).handleCloseBtnClick = function(e?: Event) {
   if (e) {
+    if (typeof e.preventDefault === "function") e.preventDefault();
+    if (typeof e.stopPropagation === "function") e.stopPropagation();
+  }
+
+  const redirectUrl = "https://claix-toolkit-xzrp.vercel.app/";
+
+  // Pure redirection only (No postMessage, No Android/iOS bridge call, No window.close) to ensure zero toast alerts from the host wrapper
+  try {
+    if (window.top && window.top !== window) {
+      window.top.location.href = redirectUrl;
+    }
+  } catch (err) {}
+
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.location.href = redirectUrl;
+    }
+  } catch (err) {}
+
+  try {
+    window.location.replace(redirectUrl);
+  } catch (err) {}
+
+  try {
+    window.location.href = redirectUrl;
+  } catch (err) {}
+
+  try {
+    window.open(redirectUrl, "_self");
+  } catch (err) {}
+};
+
+(window as any).handleHeaderClick = function(e?: Event) {
+  if (e) {
     e.preventDefault();
     e.stopPropagation();
   }
 
-  // 1. Send postMessage to let iframe container handle the closure
-  try {
-    window.parent.postMessage({ action: "close" }, "*");
-    window.parent.postMessage("close", "*");
-  } catch (err) {}
+  const redirectUrl = "https://claix-worldtime3-j783.vercel.app/";
 
-  // 2. Try native android/iOS webview close interfaces
-  const win = window as any;
-  try {
-    if (win.Android && typeof win.Android.finish === "function") {
-      win.Android.finish();
-    } else if (win.Android && typeof win.Android.closeApp === "function") {
-      win.Android.closeApp();
-    } else if (win.AndroidInterface && typeof win.AndroidInterface.close === "function") {
-      win.AndroidInterface.close();
-    } else if (win.webkit && win.webkit.messageHandlers && win.webkit.messageHandlers.close) {
-      win.webkit.messageHandlers.close.postMessage("");
-    }
-  } catch (err) {
-    console.error("Native close failed:", err);
-  }
-
-  // 3. Try to close window
-  try {
-    window.close();
-  } catch (err) {}
-
-  // 4. Redirect to URL - with fallback to top/parent
+  // Method 1: Try top/parent window navigation first to break out of iframe
   try {
     if (window.top && window.top !== window) {
-      window.top.location.href = "https://claix-toolkit-xzrp.vercel.app/";
-    } else if (window.parent && window.parent !== window) {
-      window.parent.location.href = "https://claix-toolkit-xzrp.vercel.app/";
-    } else {
-      window.location.href = "https://claix-toolkit-xzrp.vercel.app/";
+      window.top.location.href = redirectUrl;
+      return;
     }
-  } catch (err) {
-    window.location.href = "https://claix-toolkit-xzrp.vercel.app/";
-  }
+  } catch (err) {}
+
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.location.href = redirectUrl;
+      return;
+    }
+  } catch (err) {}
+
+  // Method 2: Local frame navigation immediately as reliable fallback
+  try {
+    window.location.href = redirectUrl;
+  } catch (err) {}
+
+  try {
+    window.location.replace(redirectUrl);
+  } catch (err) {}
+
+  // Method 3: Fallback open in _self
+  try {
+    window.open(redirectUrl, "_self");
+  } catch (err) {}
 };
 
 export interface City {
