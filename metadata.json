@@ -1,0 +1,8 @@
+{
+  "name": "Remix: (완료) 4.세계시간",
+  "description": "귀여운 3D 곰 캐릭터와 함께 전 세계 주요 도시들의 실시간 시간, 날짜, 주야간 상태를 한눈에 검색하고 비교하는 고해상도 모바일 최적화 세계 시간 위젯 앱입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
