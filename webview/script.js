@@ -1,11 +1,6 @@
 // World Clock Application - Standalone WebView JavaScript Controller (Pure JS)
 
-window.handleCloseBtnClick = function(e) {
-  if (e) {
-    if (typeof e.preventDefault === "function") e.preventDefault();
-    if (typeof e.stopPropagation === "function") e.stopPropagation();
-  }
-
+window.handleCloseBtnClick = function(event) {
   window.location.href = 'https://claix-toolkit-xzrp.vercel.app/';
 };
 
@@ -301,7 +296,6 @@ const addCityModalSuggestionsList = document.getElementById("add_city_modal_sugg
 
 // Toast elements
 const toastReset = document.getElementById("toast_reset");
-const toastExit = document.getElementById("toast_exit");
 const shutdownOverlay = document.getElementById("shutdown_overlay");
 const restartAppBtn = document.getElementById("restart_app_btn");
 

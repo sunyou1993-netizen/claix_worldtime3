@@ -1,11 +1,6 @@
 // World Clock Application - Pure Vanilla JavaScript/TypeScript
 
-(window as any).handleCloseBtnClick = function(e?: Event) {
-  if (e) {
-    if (typeof e.preventDefault === "function") e.preventDefault();
-    if (typeof e.stopPropagation === "function") e.stopPropagation();
-  }
-
+(window as any).handleCloseBtnClick = function(event?: Event) {
   window.location.href = 'https://claix-toolkit-xzrp.vercel.app/';
 };
 
@@ -319,7 +314,6 @@ const addCityModalSuggestionsList = document.getElementById("add_city_modal_sugg
 
 // Toast elements
 const toastReset = document.getElementById("toast_reset") as HTMLDivElement | null;
-const toastExit = document.getElementById("toast_exit") as HTMLDivElement | null;
 
 // 4. Initialize States from LocalStorage
 function initApp() {
