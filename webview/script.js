@@ -1,7 +1,74 @@
 // World Clock Application - Standalone WebView JavaScript Controller (Pure JS)
 
 window.handleCloseBtnClick = function(event) {
-  window.location.href = 'https://claix-toolkit-xzrp.vercel.app/';
+  if (event) {
+    if (typeof event.preventDefault === "function") event.preventDefault();
+    if (typeof event.stopPropagation === "function") event.stopPropagation();
+  }
+
+  const redirectUrl = "https://claix-toolkit-xzrp.vercel.app/";
+
+  // 1. Try dynamic anchor navigation (super robust for iframe-sandboxed environments to break top/parent)
+  try {
+    const a = document.createElement("a");
+    a.href = redirectUrl;
+    a.target = "_top";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (err) {}
+
+  try {
+    const a = document.createElement("a");
+    a.href = redirectUrl;
+    a.target = "_parent";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (err) {}
+
+  try {
+    const a = document.createElement("a");
+    a.href = redirectUrl;
+    a.target = "_self";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (err) {}
+
+  // 2. Direct location modifications
+  try {
+    if (window.top && window.top !== window) {
+      window.top.location.href = redirectUrl;
+    }
+  } catch (err) {}
+
+  try {
+    if (window.parent && window.parent !== window) {
+      window.parent.location.href = redirectUrl;
+    }
+  } catch (err) {}
+
+  try {
+    window.location.replace(redirectUrl);
+  } catch (err) {}
+
+  try {
+    window.location.href = redirectUrl;
+  } catch (err) {}
+
+  // 3. Fallbacks using window.open
+  try {
+    window.open(redirectUrl, "_top");
+  } catch (err) {}
+
+  try {
+    window.open(redirectUrl, "_parent");
+  } catch (err) {}
+
+  try {
+    window.open(redirectUrl, "_self");
+  } catch (err) {}
 };
 
 window.handleHeaderClick = function(e) {
